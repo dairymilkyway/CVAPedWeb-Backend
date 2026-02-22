@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials, auth
 import logging
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -38,8 +39,16 @@ def utc_now():
     return datetime.datetime.now(datetime.timezone.utc)
 
 # Initialize Firebase Admin SDK
-cred = credentials.Certificate('cvaped-fa8b2-firebase-adminsdk-fbsvc-92b2666b41.json')
+firebase_json = os.environ.get("FIREBASE_SERVICE_ACCOUNT")
+
+if not firebase_json:
+    raise ValueError("FIREBASE_SERVICE_ACCOUNT environment variable not set")
+
+firebase_dict = json.loads(firebase_json)
+
+cred = credentials.Certificate(firebase_dict)
 firebase_admin.initialize_app(cred)
+
 
 app = Flask(__name__)
 SECRET_KEY = os.getenv('SECRET_KEY')
