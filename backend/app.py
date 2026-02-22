@@ -4987,6 +4987,11 @@ def get_patient_diagnostic_comparison(current_user):
         print(traceback.format_exc())
         return jsonify({'success': False, 'message': 'Failed to fetch diagnostic comparison'}), 500
 
+@app.route("/healthz")
+def healthz():
+    return jsonify({"status": "ok"}), 200
+
+
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
     debug = os.getenv('FLASK_DEBUG', 'True').lower() == 'true'
